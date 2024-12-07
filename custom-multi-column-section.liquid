@@ -1,0 +1,1115 @@
+{% liquid
+  assign section_bg = section.settings.section_bg
+  assign paddingY = section.settings.paddingY
+  assign container = section.settings.container
+  assign layout = section.settings.layout
+  assign container_bg = section.settings.container_bg
+  assign container_paddingX = section.settings.container_paddingX
+  assign container_paddingY = section.settings.container_paddingY
+  assign container_radius = section.settings.container_radius
+  assign valignment = section.settings.valignment
+  assign bordercolor = section.settings.bordercolor
+
+  assign phone_paddingY = section.settings.phone_paddingY 
+  
+%}
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap');
+
+  .{{ section.id }}{
+    background-color: {{section_bg}};
+    padding: {{paddingY}}px 0;
+    --border-color:{{bordercolor}};
+  }
+
+  .{{ section.id }} .container{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content:center;
+    align-items:{{valignment}};
+
+    {% if layout == "container" %}
+      max-width: {{container}}px;
+    {% endif %}
+    margin:0 auto;
+    background-color: {{container_bg}};
+    padding: {{container_paddingY}}px {{container_paddingX}}px;
+    border-radius:{{container_radius}};
+  }
+
+   
+  @media(max-width: 767px){
+    .{{ section.id }} .container{
+      
+        flex-direction: column;
+         padding: {{phone_paddingY}}px 0;
+    }
+    .{{ section.id }} .container > div{
+      flex-basis:100% !important;
+      max-width:100% !important;
+      
+        
+    }
+  }
+</style>
+
+<section class="{{ section.id }}">
+  <div class="container">
+    {% for block in section.blocks %}
+      {% liquid
+        assign title = block.settings.title
+        assign sub_title = block.settings.sub_title
+        assign description = block.settings.description
+        assign btntext = block.settings.btntext
+        assign btnurl = block.settings.btnurl
+        
+        assign image = block.settings.image
+        assign aspectratio = block.settings.aspectratio
+
+        
+        assign video = block.settings.video
+        assign video_url = block.settings.video_url
+        assign autoplay = block.settings.autoplay
+        assign looping = block.settings.looping
+        assign controls = block.settings.controls
+        assign muted = block.settings.muted
+
+
+
+        if looping
+          assign loop = '&loop=1'
+        endif
+
+        if autoplay
+        assign autoplay = 'autoplay=1'
+        endif
+
+        
+        assign contentcolor =  block.settings.contentcolor
+        assign block_width = block.settings.block_width
+        assign alignment = block.settings.alignment
+        assign block_bg = block.settings.block_bg
+        assign block_paddingX = block.settings.block_paddingX
+        assign block_paddingY = block.settings.block_paddingY
+        assign block_radius = block.settings.block_radius
+
+        assign border-top-left-radius = block.settings['border-top-left-radius']
+        assign border-top-right-radius = block.settings['border-top-right-radius']
+        assign border-bottom-left-radius = block.settings['border-bottom-left-radius']
+        assign border-bottom-right-radius = block.settings['border-bottom-right-radius']
+        assign border = block.settings.border
+
+        assign btnstyle = block.settings.btnstyle
+        assign buttontextcolor = block.settings.buttontextcolor
+        assign buttoncolor = block.settings.buttoncolor
+        assign buttonhovertextcolor = block.settings.buttonhovertextcolor
+        assign button_radius = block.settings.button_radius
+
+      %}
+
+      <style>
+        .{{ block.id }} .content{
+          
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+
+        }
+        .{{ block.id }} .content h2 {
+            font-size: 40px;
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+            color:{{contentcolor}};
+        }
+        .{{ block.id }} .content h2 em{
+            font-family: "Architects Daughter", cursive;
+            font-weight: 300;
+        }
+
+        .{{ block.id }} .content h5{
+
+          margin: 0;
+          font-size: 20px;
+            color:{{contentcolor}};
+          margin-top:20px;
+        } 
+        .{{ block.id }} .content p{
+            color:{{contentcolor}};
+          margin-top:0;
+
+        }
+        
+
+        .{{ block.id }} .content a.btn{
+
+            color: {{buttontextcolor}};
+            text-transform: uppercase;
+            text-decoration: none;
+            padding: 8px 20px;
+            display: inline-block;
+            border-radius: 0;
+            border:1px solid {{buttoncolor}};
+            border-radius:{{button_radius}};
+            
+
+          {% if btnstyle == 'solid' %}
+            background-color: {{buttoncolor}};
+          {% else %}
+
+          {% endif %}
+          transition-duration:0.3s;
+        }
+
+        .{{ block.id }} .content a.btn:hover{
+          {% if btnstyle == 'solid' %}
+            background-color: transparent;
+            color:{{buttonhovertextcolor}};
+          {% else %}
+             background-color: {{buttoncolor}};
+            color:{{buttonhovertextcolor}};
+          {% endif %}
+        }
+      </style>
+
+      {% case block.type %}
+        {% when 'image' %}
+          <div
+            class="{{ block.id }}"
+            style="
+              flex-basis:{{ block_width }};
+              max-width:{{ block_width }};
+              padding:15px;
+            "
+          >
+            {% if image != blank %}
+              <img
+                src="{{ image|img_url:'1000x' }}"
+                width="auto"
+                height="auto"
+                alt="{{ image.alt }}"
+                class="content"
+                style="
+                    background-color:{{ block_bg }};
+                    padding:{{ block_paddingY }}px {{ block_paddingX }}px;
+
+                      width:100%;
+                     aspect-ratio:{{aspectratio}};
+                     object-fit:cover; 
+                  {% unless border == false %}border:1px solid var(--border-color);{% endunless %}
+                  {% unless border-top-left-radius == false %}border-top-left-radius:{{ block_radius }};{% endunless %}
+                  {% unless border-top-right-radius == false %}border-top-right-radius:{{ block_radius }};{% endunless %}
+                  {% unless border-bottom-left-radius == false %}border-bottom-left-radius:{{ block_radius }};{% endunless %}
+                  {% unless border-bottom-right-radius == false %}border-bottom-right-radius:{{ block_radius }};{% endunless %}
+                "
+              >
+            {% endif %}
+          </div>
+
+        {% when 'content' %}
+          <div
+            class="{{ block.id }}"
+            style="
+              flex-basis:{{ block_width }};
+              max-width:{{ block_width }};
+              padding:15px;
+            "
+          >
+            <div
+              class="content"
+              style="
+              height:100%;
+                aspect-ratio:{{aspectratio}};
+                  background-color:{{ block_bg }};
+                  padding:{{ block_paddingY }}px {{ block_paddingX }}px;
+
+
+                {% unless border-top-left-radius == false %}border-top-left-radius:{{ block_radius }};{% endunless %}
+                {% unless border-top-right-radius == false %}border-top-right-radius:{{ block_radius }};{% endunless %}
+                {% unless border-bottom-left-radius == false %}border-bottom-left-radius:{{ block_radius }};{% endunless %}
+                {% unless border-bottom-right-radius == false %}border-bottom-right-radius:{{ block_radius }};{% endunless %}
+
+
+
+                  text-align:{{ alignment }};
+                  {% unless border == false %}border:1px solid var(--border-color);{% endunless %}
+                  align-items:
+                    {% if alignment == 'left' %} flex-start
+                    {% elsif  alignment == 'center' %} center
+                    {% else %}flex-end
+                    {% endif %};
+              "
+            >
+              {% unless title == empty %}
+                <h2>{{ title }}</h2>
+              {% endunless %}
+              {% unless sub_title == empty %}
+                <h5>{{ sub_title }}</h5>
+              {% endunless %}
+              {% unless description == empty %}
+                <p>{{ description }}</p>
+              {% endunless %}
+
+              {% if btnurl != blank %}
+                <a href="{{ btnurl }}" class="btn">{{ btntext }}</a>
+              {% endif %}
+            </div>
+          </div>
+
+        {% when 'video' %}
+
+
+         <div
+            class="{{ block.id }}"
+            style="
+              flex-basis:{{ block_width }};
+              max-width:{{ block_width }};
+              padding:15px;
+            "
+          >
+           
+
+          {% if video != blank %} 
+
+              {{
+                video | video_tag: autoplay: autoplay ,  loop: looping, controls: controls, muted:muted, width:'100%', class:'video'
+              }}
+
+          {% else %}
+           
+           {% if video_url.type == 'youtube' %}
+
+             <iframe src="https://www.youtube.com/embed/{{ video_url.id }}?enablejsapi=1&{{ autoplay }}{{ loop }}"  
+               referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+          
+            {% elsif video_url.type == 'vimeo'%}
+ 
+               <iframe src="https://player.vimeo.com/video/{{ video_url.id }}?{{ autoplay }}{{ loop }}" 
+                 frameborder="0" allow="autoplay; encrypted-media"  allowfullscreen > </iframe> 
+           
+           {% endif %}
+          {% endif %}
+           
+
+           <style>
+             .{{ block.id }} video,
+             .{{ block.id }} iframe{
+                 background-color:{{ block_bg }};
+                    padding:{{ block_paddingY }}px {{ block_paddingX }}px; 
+                      width:100%;
+                     aspect-ratio:{{aspectratio}};
+                     object-fit:cover; 
+                  {% unless border == false %}border:1px solid var(--border-color);{% endunless %}
+                  {% unless border-top-left-radius == false %}border-top-left-radius:{{ block_radius }};{% endunless %}
+                  {% unless border-top-right-radius == false %}border-top-right-radius:{{ block_radius }};{% endunless %}
+                  {% unless border-bottom-left-radius == false %}border-bottom-left-radius:{{ block_radius }};{% endunless %}
+                  {% unless border-bottom-right-radius == false %}border-bottom-right-radius:{{ block_radius }};{% endunless %}
+             }
+           </style>
+           
+            
+             
+          </div>
+
+          
+       
+        
+
+      {% endcase %}
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Custom Multi Column",
+  "blocks": [
+    {
+      "type": "video",
+      "name":"Video",
+      "settings": [ 
+        
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Video"
+        },
+        {
+          "type": "video_url",
+          "accept": ["youtube","vimeo"],
+          "id": "video_url",
+          "label": "Youtube or Vimeo Link"
+        },
+        {
+          "type": "checkbox",
+          "id": "muted",
+          "label": "Muted",
+          "default":false
+        },
+        {
+          "type": "checkbox",
+          "id": "controls",
+          "label": "Controls",
+          "default":false
+        },
+        {
+          "type": "checkbox",
+          "id": "autoplay",
+          "label": "Auto Play",
+          "default":false
+        },
+        
+        {
+          "type": "checkbox",
+          "id": "looping",
+          "label": "Video Looping",
+          "default":true
+        },
+        
+        {
+          "type": "select",
+          "id": "aspectratio",
+          "label": "Video Size",
+          "options": [
+            {
+              "label": "Default Size",
+              "value": ""
+            },
+            {
+              "label": "1/1",
+              "value": "1/1"
+            },
+            {
+              "label": "3/4",
+              "value": "3/4"
+            },
+            {
+              "label": "4/3",
+              "value": "4/3"
+            }
+          ],
+          "default":""
+        },
+        {
+          "type": "header",
+          "content": "Block Style"
+        },
+        {
+          "type": "select",
+          "id": "block_width",
+          "label": "Block Width",
+          "options": [
+            {
+              "label": "20%",
+              "value": "20%"
+            },
+            {
+              "label": "25%",
+              "value": "25%"
+            },
+            {
+              "label": "33%",
+              "value": "33.33%"
+            },
+            {
+              "label": "50%",
+              "value": "50%"
+            },
+            {
+              "label": "100%",
+              "value": "100%"
+            }
+          ],
+          "default":"33.33%"
+        },
+
+
+    {
+      "type": "color",
+      "id": "block_bg",
+      "label": "Block Background"
+    },
+    {
+      "type": "range",
+      "id": "block_paddingY",
+      "label": "Block Padding Top Bottom",
+      "min": 0,
+      "max": 120,
+      "step": 5,
+      "default":20,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "block_paddingX",
+      "label": "Block Padding Left Right",
+      "min": 0,
+      "max": 120,
+      "step": 5,
+      "default":20,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "block_radius",
+      "label": "Block Radius",
+      "options": [
+        {
+          "label": "No Radius",
+          "value": "0"
+        },
+        {
+          "label": "15PX",
+          "value": "15px"
+        },
+        {
+          "label": "30PX",
+          "value": "30px"
+        },
+        {
+          "label": "50PX",
+          "value": "50px"
+        },
+        {
+          "label": "100PX",
+          "value": "100px"
+        },
+        {
+          "label": "150PX",
+          "value": "150px"
+        },
+        {
+          "label": "200PX",
+          "value": "200px"
+        },
+        {
+          "label": "Circle",
+          "value": "200%"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "border-top-left-radius",
+      "label": "Content Top Left Radius",
+      "default":true
+    },
+    {
+      "type": "checkbox",
+      "id": "border-top-right-radius",
+      "label": "Content Top Right Radius",
+      "default":true
+    },
+    {
+      "type": "checkbox",
+      "id": "border-bottom-left-radius",
+      "label": "Content Bottom Left Radius",
+      "default":true
+    },
+    {
+      "type": "checkbox",
+      "id": "border-bottom-right-radius",
+      "label": "Content Bottom Right Radius",
+      "default":true
+    },
+      {
+        "type": "checkbox",
+        "id": "border",
+        "label": "Box Border",
+        "default":false
+      }
+
+      ]
+    },
+    {
+      "type": "image",
+      "name":"Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "select",
+          "id": "aspectratio",
+          "label": "Image Size",
+          "options": [
+            {
+              "label": "Default Size",
+              "value": ""
+            },
+            {
+              "label": "1/1",
+              "value": "1/1"
+            },
+            {
+              "label": "3/4",
+              "value": "3/4"
+            },
+            {
+              "label": "4/3",
+              "value": "4/3"
+            }
+          ],
+          "default":""
+        },
+        {
+          "type": "header",
+          "content": "Block Style"
+        },
+        {
+          "type": "select",
+          "id": "block_width",
+          "label": "Block Width",
+          "options": [
+            {
+              "label": "20%",
+              "value": "20%"
+            },
+            {
+              "label": "25%",
+              "value": "25%"
+            },
+            {
+              "label": "33%",
+              "value": "33.33%"
+            },
+            {
+              "label": "50%",
+              "value": "50%"
+            },
+            {
+              "label": "100%",
+              "value": "100%"
+            }
+          ],
+          "default":"33.33%"
+        },
+
+
+    {
+      "type": "color",
+      "id": "block_bg",
+      "label": "Block Background"
+    },
+    {
+      "type": "range",
+      "id": "block_paddingY",
+      "label": "Block Padding Top Bottom",
+      "min": 0,
+      "max": 120,
+      "step": 5,
+      "default":20,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "block_paddingX",
+      "label": "Block Padding Left Right",
+      "min": 0,
+      "max": 120,
+      "step": 5,
+      "default":20,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "block_radius",
+      "label": "Block Radius",
+      "options": [
+        {
+          "label": "No Radius",
+          "value": "0"
+        },
+        {
+          "label": "15PX",
+          "value": "15px"
+        },
+        {
+          "label": "30PX",
+          "value": "30px"
+        },
+        {
+          "label": "50PX",
+          "value": "50px"
+        },
+        {
+          "label": "100PX",
+          "value": "100px"
+        },
+        {
+          "label": "150PX",
+          "value": "150px"
+        },
+        {
+          "label": "200PX",
+          "value": "200px"
+        },
+        {
+          "label": "Circle",
+          "value": "200%"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "border-top-left-radius",
+      "label": "Content Top Left Radius",
+      "default":true
+    },
+    {
+      "type": "checkbox",
+      "id": "border-top-right-radius",
+      "label": "Content Top Right Radius",
+      "default":true
+    },
+    {
+      "type": "checkbox",
+      "id": "border-bottom-left-radius",
+      "label": "Content Bottom Left Radius",
+      "default":true
+    },
+    {
+      "type": "checkbox",
+      "id": "border-bottom-right-radius",
+      "label": "Content Bottom Right Radius",
+      "default":true
+    },
+      {
+        "type": "checkbox",
+        "id": "border",
+        "label": "Box Border",
+        "default":false
+      }
+
+      ]
+    },
+    {
+      "type": "content",
+      "name":"Content",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "title",
+          "label": "Title",
+          "default":"Breathe <em>& rest</em>"
+        },
+        {
+          "type": "text",
+          "id": "sub_title",
+          "label": "Sub Title",
+          "default":"The new Collection"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default":"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam"
+        },
+        {
+          "type": "text",
+          "id": "btntext",
+          "label": "Button text",
+          "default":"Shop Now"
+        },
+        {
+          "type": "url",
+          "id": "btnurl",
+          "label": "Button Link"
+        },
+        {
+          "type": "color",
+          "id": "contentcolor",
+          "label": "Content Color",
+          "default":"#000"
+        },
+        {
+          "type": "header",
+          "content": "Block Style"
+        },
+        {
+          "type": "select",
+          "id": "block_width",
+          "label": "Block Width",
+          "options": [
+            {
+              "label": "20%",
+              "value": "20%"
+            },
+            {
+              "label": "25%",
+              "value": "25%"
+            },
+            {
+              "label": "33%",
+              "value": "33.33%"
+            },
+            {
+              "label": "50%",
+              "value": "50%"
+            },
+            {
+              "label": "100%",
+              "value": "100%"
+            }
+          ],
+          "default":"33.33%"
+        },
+        {
+          "type": "select",
+          "id": "aspectratio",
+          "label": "Video Size",
+          "options": [
+            {
+              "label": "Default Size",
+              "value": ""
+            },
+            {
+              "label": "1/1",
+              "value": "1/1"
+            },
+            {
+              "label": "3/4",
+              "value": "3/4"
+            },
+            {
+              "label": "4/3",
+              "value": "4/3"
+            }
+          ],
+          "default":""
+        },
+        {
+          "type": "select",
+          "id": "alignment",
+          "label": "Alignment",
+          "options": [
+            {
+              "label": "Left",
+              "value": "left"
+            },
+            {
+              "label": "Center",
+              "value": "center"
+            },
+            {
+              "label": "right",
+              "value": "Right"
+            }
+          ],
+          "default":"left"
+        },
+
+
+    {
+      "type": "color",
+      "id": "block_bg",
+      "label": "Block Background"
+    },
+    {
+      "type": "range",
+      "id": "block_paddingY",
+      "label": "Block Padding Top Bottom",
+      "min": 0,
+      "max": 120,
+      "step": 5,
+      "default":20,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "block_paddingX",
+      "label": "Block Padding Left Right",
+      "min": 0,
+      "max": 120,
+      "step": 5,
+      "default":20,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "block_radius",
+      "label": "Block Radius",
+      "options": [
+        {
+          "label": "No Radius",
+          "value": "0"
+        },
+        {
+          "label": "15PX",
+          "value": "15px"
+        },
+        {
+          "label": "30PX",
+          "value": "30px"
+        },
+        {
+          "label": "50PX",
+          "value": "50px"
+        }, 
+        {
+          "label": "100PX",
+          "value": "100px"
+        },
+        {
+          "label": "150PX",
+          "value": "150px"
+        },
+        {
+          "label": "200PX",
+          "value": "200px"
+        },
+        {
+          "label": "Circle",
+          "value": "200%"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "border-top-left-radius",
+      "label": "Content Top Left Radius",
+      "default":true
+    },
+    {
+      "type": "checkbox",
+      "id": "border-top-right-radius",
+      "label": "Content Top Right Radius",
+      "default":true
+    },
+    {
+      "type": "checkbox",
+      "id": "border-bottom-left-radius",
+      "label": "Content Bottom Left Radius",
+      "default":true
+    },
+    {
+      "type": "checkbox",
+      "id": "border-bottom-right-radius",
+      "label": "Content Bottom Right Radius",
+      "default":true
+    },
+      {
+        "type": "checkbox",
+        "id": "border",
+        "label": "Box Border",
+        "default":false
+      },
+        {
+          "type": "header",
+          "content": "Button Style"
+        },
+        {
+          "type": "select",
+          "id":"btnstyle",
+          "label": "Button Style",
+          "default":"solid",
+          "options": [
+            {
+              "label": "Solid Button",
+              "value": "solid"
+            },
+            {
+              "label": "Bordered Button",
+              "value": "bordered"
+            }
+          ]
+        },
+        {
+          "type": "color",
+          "id": "buttontextcolor",
+          "label": "Button Text Color",
+          "default":"#fff"
+        },
+        {
+          "type": "color",
+          "id": "buttoncolor",
+          "label": "Button Color",
+          "default":"#000"
+        },
+        {
+          "type": "color",
+          "id": "buttonhovertextcolor",
+          "label": "Button Hover text Color",
+          "default":"#fff"
+        },
+        {
+          "type": "select",
+          "id": "button_radius",
+          "label": "Button Radius",
+          "options": [
+            {
+              "label": "No Radius",
+              "value": "0"
+            },
+            {
+              "label": "6PX",
+              "value": "6px"
+            },
+            {
+              "label": "15PX",
+              "value": "15px"
+            },
+            {
+              "label": "50PX",
+              "value": "50px"
+            },
+            {
+              "label": "Circle",
+              "value": "200%"
+            }
+          ]
+        }
+
+      ]
+    }
+
+  ],
+  "settings": [
+    {
+      "type": "color",
+      "id": "section_bg",
+      "label": "Section Background",
+      "default":"#ECF0FC"
+    },
+    {
+      "type": "range",
+      "id": "paddingY",
+      "label": "Padding Top Bottom",
+      "min": 0,
+      "max": 120,
+      "step": 5,
+      "default":50,
+      "unit": "px"
+
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        {
+          "label": "Full Width",
+          "value": "100%"
+        },
+        {
+          "label": "Container",
+          "value": "container"
+        }
+      ],
+      "default":"container"
+    },
+    {
+      "type": "range",
+      "id": "container",
+      "label": "Container Width",
+      "min": 400,
+      "max": 1600,
+      "step": 100,
+      "default":1400,
+      "unit": "px"
+
+    },
+    
+        {
+          "type": "select",
+          "id": "valignment",
+          "label": "Vertical Alignment",
+          "options": [
+            {
+              "label": "Top",
+              "value": "flex-start"
+            },
+            {
+              "label": "Center",
+              "value": "center"
+            },
+            {
+              "label": "Bottom",
+              "value": "flex-end"
+            }
+          ],
+          "default":"center"
+        },
+
+    {
+      "type": "color",
+      "id": "container_bg",
+      "label": "Container Background"
+    },
+    {
+      "type": "range",
+      "id": "container_paddingY",
+      "label": "Container Padding Top Bottom",
+      "min": 0,
+      "max": 120,
+      "step": 5,
+      "default":20,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "container_paddingX",
+      "label": "Container Padding Left Right",
+      "min": 0,
+      "max": 120,
+      "step": 5,
+      "default":20,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "container_radius",
+      "label": "Container Radius",
+      "options": [
+        {
+          "label": "No Radius",
+          "value": "0"
+        },
+        {
+          "label": "15PX",
+          "value": "15px"
+        },
+        {
+          "label": "30PX",
+          "value": "30px"
+        },
+        {
+          "label": "50PX",
+          "value": "50px"
+        }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "bordercolor",
+      "label": "Border Color",
+      "default":"#000"
+    }, 
+    {
+      "type": "header",
+      "content": "Mobile Style"
+    },
+   
+    {
+      "type": "range",
+      "id": "phone_paddingY",
+      "label": "Padding Top Bottom",
+      "min": 0,
+      "max": 120,
+      "step": 5,
+      "default":0,
+      "unit": "px"
+
+    }
+
+  ],
+  "presets": [
+    {
+      "name": "Custom Multi Column"
+    }
+  ]
+}
+{% endschema %}
